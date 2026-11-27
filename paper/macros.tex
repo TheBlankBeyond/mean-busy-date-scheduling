@@ -1,0 +1,44 @@
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{mainq}{Theorem}
+\renewcommand{\themainq}{Q}
+\newtheorem{mainr}{Theorem}
+\renewcommand{\themainr}{R}
+% Declare names explicitly, including types that share the theorem counter.
+\crefname{theorem}{Theorem}{Theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\crefname{lemma}{Lemma}{Lemmas}
+\Crefname{lemma}{Lemma}{Lemmas}
+\crefname{proposition}{Proposition}{Propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+\crefname{corollary}{Corollary}{Corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+\crefname{definition}{Definition}{Definitions}
+\Crefname{definition}{Definition}{Definitions}
+\crefname{example}{Example}{Examples}
+\Crefname{example}{Example}{Examples}
+\crefname{section}{Section}{Sections}
+\Crefname{section}{Section}{Sections}
+\crefname{appendix}{Appendix}{Appendices}
+\Crefname{appendix}{Appendix}{Appendices}
+\crefname{mainq}{Theorem}{Theorems}
+\Crefname{mainq}{Theorem}{Theorems}
+\crefname{mainr}{Theorem}{Theorems}
+\Crefname{mainr}{Theorem}{Theorems}
+
+% Keep Lean identifiers intact and let the surrounding prose wrap.
+\newcommand{\leanid}[1]{\mbox{\ttfamily\detokenize{#1}}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\dt}{\,\mathrm{d}t}
+\newcommand{\FaceLP}{\textsc{FaceLP}}
+\DeclareMathOperator{\argmin}{arg\,min}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\cost}{cost}

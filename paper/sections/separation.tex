@@ -1,0 +1,93 @@
+\section{Strong separation and the minimizer polytope}\label[section]{sec:separation}
+
+\begin{lemma}[Support envelope]\label[lemma]{lem:envelope}
+For $c\in\R^n$, $h_P(c)$ sums the at most $m_\star$ largest positive entries of $c$. For fixed $\lambda$, there are at most $q_0=1+n(n+1)/2$ intervals on which a fixed binary vector supports $\lambda-t\alpha$. Their endpoints and a maximizing binary vector on each interval can be found by rational arithmetic for rational $\lambda$.
+\end{lemma}
+
+\begin{proof}
+If two coordinates of a point in $P$ are fractional, transferring a sufficiently small amount between them in both directions disproves extremality. A lone fractional coordinate can be perturbed in both directions when capacity is slack. When capacity is tight, integrality of capacity and of the remaining coordinates makes the last coordinate integral. The feasible binary vectors are vertices already in the cube. Selecting the largest positive scores, up to capacity, maximizes over these vertices.
+
+Include $0,H$, every zero $Z_i=\lambda_i/\alpha_i$, and every crossing $C_{ij}=(\lambda_i-\lambda_j)/(\alpha_i-\alpha_j)$ for $i<j$ and $\alpha_i\ne\alpha_j$. Keep interior events together with the endpoints, sort, and remove duplicates. Let $I_\ell=(a_\ell,b_\ell)$, $1\leq\ell\leq r$, denote the resulting intervals and $\Delta_\ell=b_\ell-a_\ell$. The signs and order of affine scores are constant on each $I_\ell$. Equal slopes give a constant order or identical scores. At its midpoint $s_\ell$ choose a support vertex $v_\ell$ using job indices to break ties. It maximizes the support throughout $I_\ell$ and at its endpoints by continuity. The bound on $r$ counts zeros and crossings. This procedure sorts $O(n^2)$ time events and at most $n$ scores in each interval.
+\end{proof}
+
+One obtains the integral by summing
+\begin{equation}\label{eq:integral-piece}
+ (\lambda\cdot v_\ell)\Delta_\ell
+ -\tfrac12(\alpha\cdot v_\ell)(b_\ell^2-a_\ell^2).
+\end{equation}
+
+\begin{lemma}[Exact membership and separation]\label[lemma]{lem:separate}
+There is a rational strong separation oracle for $K^*$ with runtime polynomial in $L$ and the binary length of its query.
+\end{lemma}
+\begin{proof}
+For a fixed query $\lambda$ use \Cref{lem:envelope} and let
+\[
+ F_\ell=\{z\in P:(\lambda-s_\ell\alpha)\cdot z
+                    =(\lambda-s_\ell\alpha)\cdot v_\ell\}.
+\]
+On $I_\ell$ the maximizing face is exactly $F_\ell$. For each vertex of $P$ its deficit relative to $v_\ell$ is affine and nonnegative on $I_\ell$. A zero at an interior point forces this affine function to vanish throughout. Taking convex hulls gives the assertion for the entire face, including persistent ties.
+
+Solve the rational feasibility linear program
+\begin{equation}\label{eq:facelp}
+ \FaceLP(\lambda):\qquad
+ z_\ell\in F_\ell\quad(1\leq\ell\leq r),\qquad
+ \sum_{\ell=1}^r \Delta_\ell z_\ell=p .
+\end{equation}
+If feasible, the constant rates on these intervals meet the workloads and are complementary. Thus $\lambda\in K^*$. Conversely, if $\lambda\in K^*$, a complementary optimum exists by \Cref{lem:compression}, and averaging it over each interval gives feasible $z_\ell$ because $F_\ell$ is convex.
+
+If the query lies outside $K$, a coordinate normal for a violated bound strictly separates it from $K^*$. Inside $K$, first solve \eqref{eq:facelp} and accept membership on feasibility. Otherwise put $g=\sum_\ell\Delta_\ell v_\ell-p$. Using $v_\ell$ in \eqref{eq:f} at a different multiplier gives $f(x)\geq f(\lambda)+g\cdot(x-\lambda)$. Therefore
+\[
+ g\cdot(\lambda-x)\geq f(\lambda)-f(x)>0\qquad(x\in K^*).
+\]
+Nonemptiness implies $g\ne0$. Return the rational normal $g/\|g\|_\infty$. The membership test is essential because an arbitrarily selected support vertex can yield a nonzero subgradient even at a minimizer. \Cref{app:encoding} establishes the oracle's exact bit bounds, including the explicit LP call.
+\end{proof}
+
+\begin{lemma}[Rational minimizer polytope]\label[lemma]{lem:polytope}
+The set $K^*$ is a rational polytope of polynomial facet complexity in the GLS whole-row convention. The bound can be computed from $L$ and $n$ without generating its faces or vertices.
+\end{lemma}
+
+\begin{proof}
+\emph{Arrangement and closure.}
+Use the following equality loci in the full multiplier space.
+\begin{enumerate}
+ \item $Z_i=Z_j$ for two zero events.
+ \item $Z_i=C_{jk}$ and $C_{ij}=C_{kl}$ for mixed and pair-crossing comparisons, with crossings defined only for nonparallel scores.
+ \item $A=0$ and $A=H$ for every zero or crossing event $A$.
+ \item $\lambda_i=\lambda_j$ when $\alpha_i=\alpha_j$.
+ \item $\lambda_j=0$ and $\lambda_j=\alpha_jV$ for the box.
+\end{enumerate}
+An identical equality represents a persistent comparison, and a constant impossible equality gives a fixed strict order. Discard both from the wall list. There are $O(n^4)$ proper hyperplanes, with polynomial rational row encodings as shown in \Cref{app:encoding}. Their complement is dense. The nonempty strict sign chambers are open and full dimensional. Every point is in a chamber closure, by taking a sequence in the complement and a subsequence of one sign pattern. The closure of a nonempty chamber is the corresponding weak system. A convex combination of any point of the weak system and a fixed chamber point, with positive weight on the latter tending to zero, gives the required approximation. The intersections $C$ of closed chambers with $K$ cover the box.
+
+\emph{Quadratic pieces.}
+Inside an open chamber the retained events, their order, and the support vector on each event interval are fixed as a combinatorial selection. The sign of a score is the sign of $Z_i-t$, the nonparallel difference has the sign of $(\alpha_i-\alpha_j)(C_{ij}-t)$, and the parallel order is fixed by the fourth type of comparison. Thus the endpoints in \eqref{eq:integral-piece} are fixed rational affine functions of $\lambda$ and the $v_\ell$ are fixed binary vectors. Integrating and subtracting $\lambda\cdot p$ yields a rational quadratic
+\[
+ q_C(x)=\tfrac12 x^TQ_Cx+d_C\cdot x+e_C
+\]
+with symmetric $Q_C$. Convexity of $f$ follows from \eqref{eq:f}. Second differences on sufficiently short segments through an interior point of the open chamber imply $v^TQ_Cv\geq0$ for every direction $v$. Since both functions are continuous, the polynomial agrees with $f$ on the whole closure and hence on $C$, including coincident events and lower-dimensional intersections.
+
+\emph{Rational cell minima.}
+Write a nonempty clipped chamber as $C=\{x:Ax\leq b\}$. It is compact. At a minimum the negative gradient lies in the cone of active outward row normals. In fact any direction satisfying the active directional inequalities is feasible for small positive steps. The gradient is nonnegative on such directions. The polar of these directions is the cone of active normals, by finite-dimensional separation for finitely generated cones \cite[Sections~19 and~22]{rockafellar1970}. Conic Carath\'eodory gives at most $n$ normals, indexed by $I$. To obtain this bound one can start with any conic representation and, if its positive support is dependent, subtract a multiple of one dependence until a coefficient vanishes, with all coefficients remaining nonnegative. The resulting nonempty rational system is
+\begin{equation}\label{eq:kkt}
+ Ax\leq b,\quad A_Ix=b_I,\quad
+ Q_Cx+d_C+A_I^T\mu=0,\quad \mu\geq0 .
+\end{equation}
+Every solution gives a cell minimizer, by the first-order inequality for the convex quadratic and the multiplier signs. This system is pointed. A line would have zero $x$-direction by boundedness and zero $\mu$-direction by nonnegativity along the entire line. Its dimension is at most $2n$ in the ambient variables, and the rational vertex bound in \Cref{app:encoding} furnishes a rational minimizer $x_C$ of polynomial encoding length.
+
+For $x\in C$,
+\[
+ q_C(x)-q_C(x_C)
+ = (Q_Cx_C+d_C)\cdot(x-x_C)+\tfrac12(x-x_C)^TQ_C(x-x_C).
+\]
+Both terms are nonnegative. The quadratic term vanishes precisely on the Hessian kernel. Thus the whole cell minimizer polytope $S_C$ is specified by $Ax\leq b$ and
+\begin{equation}\label{eq:cell-min}
+ Q_C(x-x_C)=0,\qquad (Q_Cx_C+d_C)\cdot(x-x_C)=0 .
+\end{equation}
+These equations allow minima through the interior of a cell. Their row lengths and those of the resulting vertices admit uniform polynomial bounds.
+
+\emph{Global minimum.}
+For $f_*=\min f$, coverage and equality on each cell give
+\[
+ K^*=\bigcup_{\substack{C\ne\varnothing\\ \min_C q_C=f_*}} S_C .
+\]
+The compact set $K^*$ is convex by convexity of $f$. The finite union of the qualifying polytopes is therefore the convex hull of their combined vertex lists. Each vertex of $K^*$ belongs to one of those lists, since an extreme point cannot be a proper convex combination of distinct points of $K^*$. The uniform vertex-length bound and GLS Lemma~(6.2.4)(b) give the whole-row description bound in \Cref{app:encoding}, with no condition on the affine dimension. The cells and their KKT systems enter only the description proof. The algorithm uses the oracle of \Cref{lem:separate}.
+\end{proof}

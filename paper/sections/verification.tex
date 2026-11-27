@@ -1,0 +1,27 @@
+\section{Formal verification and reproducibility}\label[section]{sec:formal}
+
+\paragraph{Scheduling and realization.}
+The Lean model uses extended nonnegative costs on the real half-line and binary activity almost everywhere. In the namespace \leanid{TBB.MeasurableSchedule}, the predicate \leanid{Feasible} specifies workload and capacity, and \leanid{normalizedCost_eq_cost} and its converse give the coefficient conversion in \Cref{sec:model}. Theorems \leanid{labeled_feasible} and \leanid{labeled_same_cost} connect measurable activities with labeled machine assignments and their costs.
+
+In the namespace \leanid{TBB}, \leanid{reflected_realization} verifies the construction for nonnegative times, and \leanid{reflected_realization_on_line} covers intervals on the full real line. The guarantees include machine and job nonoverlap, per-job rational workload and moment identities, and the $4nq$ record bound. The machine bound follows from \leanid{TBB.realizePhase_machine_min}. The bridge lemma \leanid{realize_phase_measurable} gives the Lebesgue integral identities for a phase at nonnegative times, and \leanid{realize_measurable_totals} sums them.
+
+\paragraph{Certificate checker.}
+The input is a typed rational record with instance data, a finite schedule partition (including idle pieces), a candidate multiplier, and the claimed moments and objective. At each phase endpoint the implementation checks a rational scalar threshold. For scores $c$ and $\theta\geq0$, any $u\in P$ satisfies
+\[
+ c\cdot u \leq m\theta+\sum_{j=1}^n\max(c_j-\theta,0).
+\]
+Indeed subtract $\theta$ from each score, bound the positive terms by the unit rate caps and use the capacity bound for the $\theta$ term. Equality for the phase assignment certifies that it is a maximizer. The checker combines endpoint inequalities by affine interpolation and checks the tail sign condition. It also verifies dimensions and index ranges, positive data, the phase partition, assignment compatibility, exact work, moments, and primal--dual equality.
+
+The theorem \leanid{TBB.check_sound} turns acceptance of a raw rational certificate into a decoded certificate and its soundness proof. The predicate \leanid{TBB.Certificate.Sound} includes feasibility, exact moments and cost, and optimality over arbitrary feasible measurable competitors. Its theorem \leanid{optimal_aeActivity} covers activities measurable for the completed measure. The proof compares against competitors running past the certificate horizon, and extended nonnegative costs accommodate infinite-cost competitors. The guarantee is for the instance actually encoded by the certificate. Matching those fields to an intended instance is the user's responsibility. The JSON adapter used in bulk experiments is outside the trusted mathematical proof path.
+
+\paragraph{Benchmark and private verification.}
+\leanid{TBB.benchmark_accepts} proves acceptance through Lean kernel reduction. \leanid{TBB.benchmark_optimal} derives the global optimality statement for the value $879/40$. The supplement includes the typed benchmark and audit instructions. The current verification uses Lean 4.36.0 and Mathlib revision
+\begin{center}
+ \texttt{\small fc4f59e577feb1a4956671bc04ac18aaaf8cd842}.
+\end{center}
+The manifest pins the transitive dependencies. We rebuilt the project modules and validated the 52 audit declarations and their exported proof dependencies with the patched Lean kernel and independent kernels including nanoda.
+
+An independent AI review of the historical Lean 4.19.0 build reproduced a clean source build of 2{,}274 modules with zero errors. The audit of 52 declarations reported only \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}. The audited project source contains no proof placeholders, project-defined axioms, or uses of \leanid{native_decide} or unsafe code. During private verification the review reproduced 79 archived optimality-certificate checks, 1{,}553 archived realization checks and 23 archived negative controls. Additional private checks covered constructor replay on the 1{,}553 realization inputs and two further cases, and 329{,}890 Node verifier assertions. The AI referee independently generated 123 certificates that the checker accepted and 62 adversarial corruptions that it rejected. These bulk results are executable evaluations. The benchmark acceptance and optimality statements are kernel-verified. The extended inputs and replay tools are retained privately.
+
+\paragraph{Scope.}
+Theorem~Q, the GLS-based optimization procedure, its bit-complexity proof, and the full optimizer-to-certificate chain are conventional mathematics. The full theoretical GLS optimizer has not been implemented. The executable checker certifies a supplied witness independently of the method used to obtain it.

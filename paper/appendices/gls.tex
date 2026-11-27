@@ -1,0 +1,14 @@
+\section{Exact polyhedral optimization contracts}\label[appendix]{app:gls}
+
+We use the following results of the 1988 first edition of Gr\"otschel, Lov\'asz and Schrijver \cite{gls1988}. Page numbers refer to its printed pagination.
+
+\begin{itemize}
+ \item Definition (6.2.2), p.~163. A rational polyhedron with facet complexity at most $F$ admits a system of rational inequalities with full row lengths at most $F$. A \emph{well-described polyhedron} is a triple $(P;d,F)$ of encoding length $d+F$. The promised description need not be supplied. A vertex complexity bound controls the length of each vector in finite vertex and ray generating lists. For a compact polytope the ray list is empty.
+ \item Strong separation, (2.1.4), p.~48 and \S6.2, p.~163. On rational $y$ the oracle affirms membership or returns a rational $c$ with $c^Ty>c^Tx$ for all $x$ in the set. A unit norm is not required by (2.1.4). Our oracle supplies $\|c\|_\infty=1$ also, as obtained by positive rational scaling in the non-coordinate case. Compare the weak separation normalization in (2.1.13), p.~51.
+ \item Lemma (6.2.4), pp.~164--165. Facet complexity at most $F$ implies vertex complexity at most $4d^2F$. Vertex complexity at most $\nu$ implies facet complexity at most $3d^2\nu$, including for lower-dimensional polyhedra.
+ \item Theorem (6.4.1), pp.~174--178. Given a well-described polyhedron by strong separation, one can decide emptiness and return an exact rational feasible point in oracle-polynomial time. No ambient interior is required.
+ \item Theorem (6.4.9), pp.~179--180. Strong separation, strong violation, and strong linear optimization for a well-described polyhedron are mutually oracle-polynomially reducible. Strong linear optimization has a rational linear objective and returns an exact optimizer, emptiness, or a direction of unbounded increase as appropriate.
+ \item Theorem (6.4.12), pp.~180--181. A linear program given by explicit rational matrix, right side and objective can be solved in time polynomial in their encoding, with exact rational recovery in the feasible bounded case.
+\end{itemize}
+
+Here nonemptiness of the implicit set follows from attained duality in \Cref{lem:compression}. \Cref{lem:polytope} proves rationality in the ambient space and \eqref{eq:F} supplies the required promise, including affine-hull constraints. No interior assumption on $K^*$, on its prefix faces, or on \FaceLP{} is used. All of these are bounded. The oracle in \Cref{lem:separate} tests exact membership and satisfies the strict inequality, and the prefix and padding oracles preserve it by the coordinate tests. \Cref{app:encoding} bounds the input, written queries, reply encodings and exact subroutine time in the oracle-Turing model of \cite[\S1.2, pp.~26--27]{gls1988}. The multiplier and rate recovery described there provides finite rational coordinates by exact optimization under these contracts.

@@ -1,0 +1,35 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,booktabs,tikz}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\input{macros}
+\title[Exact optimization of weighted mean busy dates]{Exact Polynomial-Time Optimization of Weighted Mean Busy Dates on Identical Parallel Machines}
+\author{The Blank Beyond}
+\date{27 November 2026 (revised)}
+\subjclass[2020]{90B35, 90C05, 90C25}
+\keywords{mean busy date, preemptive scheduling, parallel machines, exact bit complexity, continuous linear programming, formal verification}
+\hypersetup{pdfauthor={The Blank Beyond},pdftitle={Exact Polynomial-Time Optimization of Weighted Mean Busy Dates on Identical Parallel Machines},pdfsubject={Research manuscript (preliminary finding)},pdfkeywords={mean busy dates, preemption, exact optimization, identical parallel machines}}
+\raggedbottom
+\begin{document}
+\begin{abstract}
+We consider preemptive scheduling on identical parallel machines with migration, positive rational workloads and objective coefficients, and all jobs available at time zero. The objective is a weighted sum of job processing-time first moments. We give a deterministic algorithm with weakly polynomial Turing bit complexity when the machine count is part of the input. It returns an exact optimum over feasible measurable schedules on the half-line. An exact linear program tests membership in the dual minimizer set, and a rational description bound permits recovery by strong separation. A reflected row-wrapping construction realizes the optimal constant allocations while preserving each job's workload and first moment. The realization theorem and the soundness of an executable rational optimality checker are verified in Lean. The optimization and its bit-complexity analysis are proved conventionally.
+\end{abstract}
+\maketitle
+\input{sections/introduction}
+\input{sections/model}
+\input{sections/duality}
+\input{sections/separation}
+\input{sections/recovery}
+\input{sections/realization}
+\input{sections/example}
+\input{sections/verification}
+\input{sections/conclusion}
+\appendix
+\input{appendices/encoding}
+\input{appendices/gls}
+\bibliographystyle{amsplain}
+\bibliography{references}
+\end{document}

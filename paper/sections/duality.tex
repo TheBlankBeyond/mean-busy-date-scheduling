@@ -1,0 +1,33 @@
+\section{Continuous relaxation and attained duality}\label[section]{sec:dual}
+
+Set $V=\sum_jp_j$, $H=2V$, and
+\[
+ P=\{u\in[0,1]^n:\ \textstyle\sum_j u_j\leq m_\star\}.
+\]
+The relaxation allows measurable rates $u(t)\in P$ with the original workloads. Its cost is $C(u)=\int t\,\alpha\cdot u(t)\dt$ over the specified horizon. All feasible schedules induce such controls.
+
+\begin{lemma}[Time compression and multiplier bounds]\label[lemma]{lem:compression}
+The relaxed minimum over the half-line is attained by a control vanishing after $V$. For
+\begin{equation}\label{eq:f}
+ h_P(c)=\max_{v\in P}c\cdot v,\qquad
+ J(\lambda)=\int_0^H h_P(\lambda-t\alpha)\dt,\qquad
+ f(\lambda)=J(\lambda)-\lambda\cdot p,
+\end{equation}
+the set $K^*=\argmin_{\lambda\in\R^n} f(\lambda)$ is nonempty, contained in $K=\prod_j[0,\alpha_jV]$, and the relaxed minimum is $-\min f$. At any pair of primal and dual optima the control maximizes the support integrand almost everywhere on $[0,H]$.
+\end{lemma}
+
+\begin{proof}
+We first compress feasible controls without increasing cost, then use finite-horizon attainment and the workload value function to obtain and bound the multipliers.
+
+For a feasible half-line control put $r(t)=\sum_j u_j(t)$, $\rho(t)=\min(1,r(t))$ and $s(t)=\int_0^t\rho(a)\,\mathrm{d}a$. The clock $s$ is absolutely continuous, satisfies $s(t)\leq t$, and tends to $S=\int_0^\infty\rho(t)\dt\leq V$. It pushes the measure $\rho(t)\dt$ onto Lebesgue measure on $(0,S)$. For $0<x<S$ the mass of the preimage of the initial segment $(0,x)$ is $x$, by continuity of the clock and its definition as a cumulative integral. Initial segments determine the pushforward. The generalized inverse $\tau(v)=\inf\{t\geq0:s(t)\geq v\}$ satisfies $\tau(s(t))=t$ for $\rho(t)\dt$-almost every $t$. The nontrivial levels of $s$ are intervals with zero $\rho(t)\dt$ mass and there are at most countably many, since their interiors are disjoint. The endpoint levels $0,S$ also have zero mass. We can take Borel representatives of the measurable rates and modify them on null sets.
+
+On the new clock use $u_j(\tau(v))/\rho(\tau(v))$ where the denominator is positive and zero on the exceptional set and after $S$. The pushforward and inverse identities show that the denominator is positive almost everywhere on $(0,S)$. If $0<r\leq1$, the new rates are nonnegative and sum to one. If $r>1$ they are unchanged. Thus they are in $P$. Their workloads are the original ones. The new first moments are $\int_0^\infty s(t)u_j(t)\dt\leq\int_0^\infty t u_j(t)\dt$, using nonnegative integration even for infinite original moments. Consequently the half-line infimum equals the infimum on $[0,H]$, using in the other direction extension by zero.
+
+On $[0,H]$ the $P$-valued controls form a weak-$*$ closed subset of a bounded ball in $L^\infty([0,H];\R^n)$. Indeed, each linear rate constraint holds almost everywhere exactly when it holds in integrals against every nonnegative $L^1$ test function. Workloads and cost are weak-$*$ continuous, so Banach--Alaoglu gives attainment on any nonempty workload fiber. The set of workloads is $HP$, by convexity in one direction and the constant control in the other. Write $W(v)$ for the minimum at workload $v\in HP$. It is finite and convex, by convex combinations of minimizing controls. Since $0<p_j<H$ and $V<MH$, the workload $p$ is in the interior of $HP$. By the supporting subgradient theorem for a finite convex function at such a point \cite[Theorem~23.4]{rockafellar1970}, there is $\lambda$ with
+\[
+ W(v)\geq W(p)+\lambda\cdot(v-p)\qquad(v\in HP).
+\]
+For every control without a workload constraint, $C(u)-\lambda\cdot\int u\geq W(p)-\lambda\cdot p$, and an optimum at $p$ achieves equality. The unconstrained infimum is $-J(\lambda)$. A pointwise maximizer of the support is measurable by choosing among finitely many vertices with a fixed tie order, or by the envelope in \Cref{lem:envelope}. Weak duality for every multiplier follows by integrating the same support inequality at workload $p$. This proves dual attainment and the claimed equality. At any pair of optima the nonnegative support deficit integrates to zero, which gives complementarity. Conversely, a control of workload $p$ with zero deficit almost everywhere attains the dual bound.
+
+Compress a primal optimum and extend it by zero after $V$. It remains optimal since the minimum over the half-line equals $W(p)$. Complementarity with any $\lambda\in K^*$ gives $h_P(\lambda-t\alpha)=0$ almost everywhere on $(V,H)$. Each coordinate unit vector belongs to $P$, so $\lambda_j\leq\alpha_j V$. If $\lambda_j\leq0$, job $j$ has strictly negative score at every $t>0$. Deleting its positive rate strictly improves any pointwise maximizer with positive $j$-th coordinate, contradicting the positive required workload. Hence $K^*\subseteq K$.
+\end{proof}

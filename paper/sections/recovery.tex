@@ -1,0 +1,25 @@
+\section{Exact recovery and optimality on the half-line}\label[section]{sec:recovery}
+
+Apply strong linear optimization to the well-described polytope $K^*$, with exact strong separation from \Cref{lem:separate} and a computable row-length promise from \Cref{lem:polytope}. The requisite GLS results, including their lower-dimensional contracts, are stated in \Cref{app:gls}. Use at most $n$ calls to minimize successive coordinates of a multiplier, imposing each attained value as an equality before the next call. Each restriction is a nonempty exposed face of its predecessor, and its vertices are original vertices of $K^*$. To separate a query violating a fixed coordinate use a signed coordinate vector. For the other queries the original separation oracle suffices. The final surviving point $\lambda^*$ is rational, lies in $K^*$, and has the vertex encoding bound. The zero-coordinate padding in \Cref{app:encoding} gives the uniform oracle convention. Alternatively the GLS feasibility result alone would give a rational multiplier.
+
+Build \eqref{eq:facelp} at $\lambda^*$. This is a nonempty bounded explicit LP. Minimize and fix successive rate coordinates by exact rational LP, giving a vertex $z^*$ after at most $nr$ calls. This supplies rates complementary to the dual and with workload $p$. Apply \Cref{thm:r} on the corresponding $r$ intervals and idle after $H$. The workload and individual first moments are preserved, so the schedule attains the relaxed minimum.
+
+For any feasible half-line schedule, the bound $\lambda^*_j\leq\alpha_jV$ implies $\lambda^*_j-t\alpha_j\leq0$ for $t\geq H$. The support is zero on the tail because $P$ contains zero and has nonnegative coordinates. The pointwise inequality
+\[
+ (\lambda^*-t\alpha)\cdot\sigma(t)\leq h_P(\lambda^*-t\alpha)
+\]
+then gives
+\begin{equation}\label{eq:bound}
+ \cost(\sigma)\ \geq\ \lambda^*\cdot p-J(\lambda^*) .
+\end{equation}
+For finite cost both sides of the integrated pointwise comparison are justified by finite workloads and the compactly supported envelope. For infinite cost the finite lower bound holds immediately. Thus no restriction on the competitors' finishing times is needed. The constructed schedule attains equality in \eqref{eq:bound}. More generally the same certificate argument works with any supplied rational horizon $H$ satisfying $\lambda_j-H\alpha_j\leq0$ for all $j$ and with exact primal--dual equality.
+
+\paragraph{Algorithm.}
+\begin{enumerate}
+\item Form the raw coefficients, horizon, box and row-length bound in \Cref{app:encoding}.
+\item Recover $\lambda^*$ by successive strong optimization. For each query check the imposed coordinate constraints and box, build the support envelope, solve \eqref{eq:facelp}, and return membership or the separating normal from \Cref{lem:separate}.
+\item Build the final \FaceLP{} and obtain a rate vertex by successive exact LP minimization.
+\item Use reflected wrapping on the constant-rate intervals. Return the schedule, exact cost and multiplier.
+\end{enumerate}
+
+An exact certificate verifier checks machine and job nonoverlap, workloads, rational moments and cost by an event sweep. It checks the tail condition and integrates $h_P$ using the envelope, or checks a proposed common maximizing assignment at both endpoints of each interval. For any fixed feasible $z$ the score deficit from that assignment is affine, and nonnegativity at the endpoints gives nonnegativity throughout. Separate maximizing assignments at the two endpoints alone do not certify that the intervening support is linear. Persistent ties are allowed. Equality with \eqref{eq:bound} suffices, without access to the optimizer. These exact operations and the rational recovery have polynomial bit complexity by \Cref{app:encoding}. Together with the realization proof, this completes \Cref{thm:q}.

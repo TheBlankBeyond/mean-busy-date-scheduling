@@ -1,0 +1,17 @@
+\section{Reflected row wrapping}\label[section]{sec:realization}
+
+We prove \Cref{thm:r}. On a phase $[a,b]$ of positive length put $h=(b-a)/2$ and give job $j$ a first-half length $\ell_j=hz_j$. Place the job segments consecutively in index order on a line, then partition the line into rows of length $h$. Each row corresponds to a machine, with the position within the row giving the operation time in $[0,h)$. Empty pieces are discarded. The total length is at most $mh$ and at most $nh$, so at most $\min(m,n)$ rows are occupied. Every job has length at most $h$. It can meet at most two rows in positive length.
+
+Row intervals are disjoint on each machine. If a job wraps, starting at local time $s$ in one row, its two operations occupy $[s,h)$ and $[0,r)$, with $r=\ell_j-(h-s)\leq s$. So the job is not processed on two machines at the same time. The same conclusion holds if $r=s$, with half-open endpoints. Translate the first-half operations by $a$. For each operation $[s,e)$ in absolute time add its reflection $[a+b-e,a+b-s)$ on the same machine for the same job. Reflection reverses order and preserves nonoverlap within the other half. The two halves are disjoint as half-open intervals. \Cref{fig:reflection} shows a wrapped job and its reflected operations.
+
+Each job has total work $2\ell_j=(b-a)z_j$. The indicator satisfies $\sigma_j(a+b-t)=\sigma_j(t)$ almost everywhere. The change of variable $t\mapsto a+b-t$ gives, for its first moment $I_j$ on this phase,
+\[
+ I_j=(a+b)\int_a^b\sigma_j(t)\dt-I_j.
+\]
+Substituting the workload proves \eqref{eq:target-moments}. This holds for any rational shift, since the integrals on the bounded interval exist also for signed $t$. The case $a=b$ has zero work and first moment and requires no records. Consecutive phases meet only at excluded right endpoints, so their machine and job assignments can be concatenated. These arguments also cover zero rates, exact row fills and idle machines.
+
+The row pieces of a job have endpoints computed by sums of the half-lengths and subtractions of row boundaries. One can scan the jobs in order maintaining the current occupied row and position, splitting only across the next boundary if necessary. This uses at most two first-half pieces per job and then copies their reflections. Hence there are at most $4nq$ nonempty records. Sorting their endpoints gives $O(nq)$ global event intervals (including gaps), with at most $n$ active assignments each. Products, sums over at most $n$ rational lengths per phase, comparisons and reflection have polynomial encoding and bit time by the arithmetic rules in \Cref{app:encoding}. This is the constructive proof of \Cref{thm:r}.
+
+\input{figures/reflection}
+
+Ordinary wrapping over the full interval can change individual moments. For $[0,1]$, one machine and rates $(1/2,1/2)$, both fractional first moments are $1/4$. Serving job 1 on $[0,1/2)$ followed by job 2 on $[1/2,1)$ gives first moments $(1/8,3/8)$. With coefficients $(1,2)$ the fractional cost is $3/4$, compared with $7/8$ for that order and $5/8$ for its reverse. Reflection makes each job's first moment equal to its workload times the phase midpoint.

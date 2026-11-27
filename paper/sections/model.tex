@@ -1,0 +1,32 @@
+\section{Model and main theorems}\label[section]{sec:model}
+
+There are $n\geq 1$ jobs with workloads $p_j\in\Q_{>0}$, coefficients $\alpha_j\in\Q_{>0}$, and $m\geq1$ identical unit-speed machines. Jobs are available at time zero. A schedule consists of measurable job assignments to the machines on $[0,\infty)$, with an idle assignment allowed. At almost every time each job is assigned to at most one machine. Write $\sigma_j(t)\in\{0,1\}$ for its activity indicator. The workloads and objective are
+\begin{equation}\label{eq:model}
+ \int_0^\infty \sigma_j(t)\dt=p_j\quad(1\leq j\leq n),\qquad
+ \cost(\sigma)=\sum_{j=1}^n\alpha_j\int_0^\infty t\sigma_j(t)\dt .
+\end{equation}
+Preemption and migration are unrestricted. The cost may take the value $+\infty$. Equivalently, one can specify measurable binary activities with $\sum_j\sigma_j\leq m$ almost everywhere. Indeed, assign the active job indices in increasing order to the first available machines at each time, making all machines idle on an exceptional null set. This assignment is measurable because there are finitely many active subsets. Both representations permit arbitrary measurable changes of activity.
+
+Queyranne's displayed $M_j$ is the raw integral $\int_0^\infty t\sigma_j(t)\dt$ \cite[p.~15]{queyranne2010}. For the normalized convention $\bar M_j=M_j/p_j$, the weighted objective $\sum_j w_j\bar M_j$ has coefficients $\alpha_j=w_j/p_j$. Conversely, the normalized weights corresponding to raw coefficients $\alpha_j$ are $w_j=\alpha_jp_j$.
+
+The algorithm uses an explicit list of jobs, a positive binary integer $m$, and binary numerator--denominator pairs for the rational data. Let $L$ be the entire bit length, including framing. A finite output schedule consists of job and machine indices and rational half-open operation intervals $[s,e)$ with $0\leq s<e$. The schedule idles elsewhere. In the optimization proof put $m_\star=\min(m,n)$.
+
+\begin{mainq}[Exact optimization]\label[mainq]{thm:q}
+For every instance of \eqref{eq:model}, a deterministic algorithm returns an exact rational optimum, a globally optimal finite schedule with rational endpoints, and a rational dual certificate verifiable in polynomial bit time. The algorithm is weakly polynomial, using a number of Turing bit operations polynomial in $L$ with $m$ part of the input. Global optimality is over the feasible measurable schedules on $[0,\infty)$. There are $O(n^3)$ nonempty operation records and global event intervals up to the certificate horizon, or $O(n^4)$ entries when every active job and machine is listed on each such interval. The endpoint lengths and the entire output encoding are polynomial in $L$.
+\end{mainq}
+
+\begin{mainr}[Reflected realization]\label[mainr]{thm:r}
+Let $m,n\geq1$. For each of $q$ consecutive rational intervals $[a_\ell,b_\ell]$, $a_\ell\leq b_\ell$, let $z_\ell\in\Q^n$ satisfy
+\[
+ 0\leq z_{\ell j}\leq1,\qquad \sum_{j=1}^n z_{\ell j}\leq m .
+\]
+There is an explicit finite rational realization on at most $\min(m,n)$ machines, with no machine or job overlap, such that for each interval and job
+\begin{equation}\label{eq:target-moments}
+ \int_{a_\ell}^{b_\ell}\sigma_j(t)\dt=(b_\ell-a_\ell)z_{\ell j},\qquad
+ \int_{a_\ell}^{b_\ell}t\sigma_j(t)\dt
+      =\tfrac12(b_\ell^2-a_\ell^2)z_{\ell j}.
+\end{equation}
+The construction uses at most $4nq$ nonempty operation records and is computable in polynomial bit time in the explicit allocation encoding. It applies on the real line for rational shifts and gives a schedule in the model above when the intervals are nonnegative. The bound on global event intervals is $O(nq)$ and the expanded assignment representation has size $O(n^2q)$ entries.
+\end{mainr}
+
+The proof of \Cref{thm:q}, including exact rational recovery and the binary complexity analysis, is conventional. The construction, feasibility, workload and moment identities, and record bound of \Cref{thm:r} are machine-checked. The associated checker theorem and the relation between the executable and measurable models are described in \Cref{sec:formal}.

@@ -1,0 +1,92 @@
+\section{Explicit rational encoding bounds}\label[appendix]{app:encoding}
+
+We give a computable GLS row-length promise and bound the time and size of the operations that use it. Throughout, $n\leq L$. For a reduced rational $a/b$ with $b>0$, a component bound $B\geq1$ means $|a|,b<2^B$. Product bounds add, and reciprocation of a nonzero rational and negation preserve the bound. For a sum of at most $k$ signed rationals of component bound $B$ use
+\[
+ S(k,B)=kB+\lceil\log_2(k+1)\rceil+2 .
+\]
+The product of the $k$ denominators bounds the denominator, and each term after clearing it has magnitude less than $2^{kB}$. The estimate holds also for partial sums, with reduction at each operation. Integer arithmetic, exact comparison and reduction by gcd take polynomial bit time on the indicated lengths.
+
+GLS charges $1+\lceil\log_2(|a|+1)\rceil$ bits for a signed integer $a$ \cite[\S1.3, pp.~29--30]{gls1988}. A reduced rational costs the sum for its numerator and denominator. A scalar with bound $B$ costs at most $2B+2$ bits, a $d$-vector at most $d(2B+2)$, and a row with right-hand side at most $(d+1)(2B+2)$. Matrices and explicit systems sum these lengths. An equation can be given by two opposing rows.
+
+\subsection{Vertices of rational systems}
+For $d\geq1$ define
+\[
+ D(d,B)=d(d+1)B+d\lceil\log_2(d+1)\rceil+2.
+\]
+At a vertex of a finite rational system, $d$ independent tight rows exist, since a smaller active rank would permit a feasible displacement in both signs. If each entry, including the right side, has component bound $B$, clearing denominators separately in these $d$ rows bounds the integer entries by $2^{(d+1)B}$ in magnitude. Each determinant in Cramer's rule is bounded by $d!2^{d(d+1)B}$. Hence each vertex coordinate has bound $D(d,B)$. A nonempty pointed polyhedron has a vertex. Start at any point of rank less than $d$ and take a nonzero direction in the active nullspace. Pointedness implies that some row does not annihilate it. Choose its sign to meet a new constraint by following it until the first such constraint becomes tight. The active rank strictly increases, because the new row does not annihilate the direction. This proves existence up to rank $d$, also for lower-dimensional or unbounded systems, with no need for an active-set enumeration.
+
+\subsection{Description of the minimizer polytope}
+Put $b=L+4$. The input workloads, input weights, $n$ and $m_\star$ have component bound $b$, and $\alpha$ has bound $2b$, allowing the division for normalized weights. Computing $m_\star$ uses the binary $m$ directly. Bounds for $V$, $H$, and each $\alpha_jV$ are $S(n,b)$, $S(n,b)+1$, and $2b+S(n,b)$. Set
+\[
+ E=S(n,b)+4b+8,\qquad B_A=S(2,E).
+\]
+Since $\alpha_i-\alpha_j$ has bound $S(2,2b)\leq4b+4$, the affine events in \Cref{lem:envelope} have every coefficient, including the constant, bounded by $E$. The arrangement walls and box rows in \Cref{lem:polytope} are oriented comparisons with component bound $B_A$ and row length at most $(n+1)(2B_A+2)$.
+
+For the rational quadratic on each cell, set
+\begin{align*}
+ T_0 &= q_0\bigl(2n(n+1)+2(n+1)^2\bigr)+n,\\
+ B_Q &= S\bigl(T_0,\,2E+S(n,2b)+3\bigr)+4 .
+\end{align*}
+In \eqref{eq:integral-piece}, the linear score times the endpoint difference contributes at most $2n(n+1)$ terms to the monomial expansion on each interval. The endpoint squares contribute at most $2(n+1)^2$ terms with factors from $\alpha\cdot v_\ell$, and subtracting $\lambda\cdot p$ adds $n$. The component bound inside $S$ follows from the product rule. The spare four bits cover conversion to the entries of $Q_C,d_C$, including the diagonal factor of two. The same coefficients represent the function on the closure.
+
+The system \eqref{eq:kkt} has at most $2n$ variables and rows with coefficients from $A,b,Q_C,d_C,0,\pm1$. Its nonempty pointed form gives a rational $x_C$ with coordinate bound
+\[
+ B_0=D(2n,\max\{B_A,B_Q\}).
+\]
+The minimizer equations \eqref{eq:cell-min} then have rows bounded by using
+\begin{align*}
+ B_g &= S(n+1,B_Q+B_0),\\
+ B_C &= \max\{B_A,B_Q,S(n,B_Q+B_0),B_g,S(n,B_g+B_0)\},\\
+ B_* &= D(n,B_C).
+\end{align*}
+Here $B_g$ bounds $Q_Cx_C+d_C$. The dot-product right sides in \eqref{eq:cell-min} are covered by $S(n,B_Q+B_0)$ and $S(n,B_g+B_0)$. Thus $B_*$ bounds every vertex coordinate of every cell minimizer polytope. By \Cref{lem:polytope} it also bounds every vertex coordinate of $K^*$. The total length of each vertex vector is at most $\nu=n(2B_*+2)$. GLS Lemma~(6.2.4)(b) \cite[pp.~164--165]{gls1988} gives the computable whole-row bound
+\begin{equation}\label{eq:F}
+ F=3n^2\nu .
+\end{equation}
+
+For a direct affine-hull bound, let $k$ be its dimension and choose $k+1$ affinely independent vertices spanning it. The $k$ difference vectors against a base vertex have coordinate bound $S(2,B_*)$. Select $k$ pivot columns. To construct a basis of normals, set one free coordinate to one, the other free coordinates to zero, and solve the pivot system for each choice. Cramer's rule gives the bound $B_\perp=D(n,S(2,B_*))$, with unit normals when $k=0$ and no normals when $k=n$. The affine-hull equations have right sides given by dot products with the base vertex, so each whole row in either sign has length at most
+\[
+ (n+1)\bigl(2\max\{B_\perp,S(n,B_\perp+B_*)\}+2\bigr).
+\]
+Independently GLS (6.2.3) gives a standard-form bound $35n^2F$ for affine-hull equations and relative-facet rows. These are existence estimates. Denominators are cleared within sums or individual systems and can differ across cells. The algorithm does not generate the global row or vertex lists.
+
+\subsection{Oracle computations and exact LP}
+Let $T$ be the length of a rational query in the original $n$ coordinates. The exact rational evaluation, sorting, and midpoint construction of the time events have bounds
+\begin{align*}
+ B_t(T)&=S(n+1,E+T+2),&
+ B_\Delta&=S(2,B_t(T)),&
+ B_{\mathrm{mid}}&=B_\Delta+1 .
+\end{align*}
+For midpoint score components use $B_s=S(2,\max\{T,B_{\mathrm{mid}}+2b\})$. The support value there costs a sum of at most $n$ such components. Thus every \FaceLP{} coefficient and right side has component bound
+\[
+ B_{\mathrm{LP}}(T)=\max\{B_\Delta,B_s,S(n,B_s),b\}.
+\]
+With $N_r=nr$ variables, there are $2nr$ box rows, $r$ capacity rows, $2r$ support-face rows, and $2n$ workload rows when expressing equations in both signs. Each variable is bounded by its box. The dense rational LP including a zero objective has length at most
+\[
+ (2nr+3r+2n)(N_r+1)(2B_{\mathrm{LP}}(T)+2)+2N_r
+\]
+plus polynomial dimensional framing. GLS Theorem~(6.4.12) gives exact feasibility and a point if feasible, including for lower-dimensional feasible sets.
+
+Outside the box the query is separated by a signed coordinate normal. When \FaceLP{} is infeasible at a query in the box, the mismatch $g$ has coordinate bound $B_{\mathrm{cut}}=S(q_0+1,\max\{B_\Delta,b\})$. Its positive max norm is a rational magnitude of one coordinate. The normalized separator has total size at most $n(4B_{\mathrm{cut}}+2)$. Construction of the envelope uses $O(n^2\log(n+1)+nq_0\log(n+1))$ rational comparisons. Formation of the LP, its exact solution, and all remaining arithmetic and comparisons take bit time polynomial in $L+T$. The oracle uses no approximation of the unknown minimum value.
+
+\subsection{Implicit and explicit recovery}
+For the question-length convention of GLS \cite[(1.2.1), pp.~26--27]{gls1988}, provide the implicit optimizer with $K^*\times\{0\}^L$ in dimension $n+L$ with bound $F+4L$. Zero coefficients add at most $4L$ bits per row and the added zero equations fit the same bound. At a rational query, check the added coordinates and either separate by a signed coordinate vector or extend the original separator by zeros. A padded query has length at least $L$ so the original runtime and reply bound, polynomial in $L+T$, are bounded by a fixed polynomial in the question length alone. Padded optimization objectives also have zero new coordinates.
+
+For successive multiplier minima the sets are exposed faces, hence the fixed values have bound $B_*$. Their prefix equations can be added with the uniform bound
+\[
+ F'=\max\{F,(n+1)(2B_*+2)\}
+\]
+before padding. Strong optimization queries the augmented oracle with input length bounded by $n+L+F'+4L$ plus the length of a coordinate objective. The number of oracle calls and lengths of written queries are polynomial in that input length. Implementing the oracle as above therefore gives ordinary deterministic polynomial Turing bit time. The final multiplier has length at most $T_*=n(2B_*+2)$. No approximate minimizer is rounded to obtain it.
+
+Apply the same successive-coordinate method to \FaceLP{} at $\lambda^*$. Each new constraint fixes the coordinate of an original LP vertex, so the right sides and newly formed explicit LPs have polynomial encoding throughout. After at most $nr$ exact LP calls, each coordinate of the returned vertex satisfies
+\[
+ B_z=D(nq_0,B_{\mathrm{LP}}(T_*)).
+\]
+These rate-recovery calls are used only at $\lambda^*$ and are separate from the feasibility calls in the oracle.
+
+\subsection{Schedule and certificate}
+Put $N=nq_0$, $B_t=B_t(T_*)$, $B_h=S(2,B_t)+1$ and $B_\Sigma=S(n,B_h+B_z)$. These bound the event endpoints, half-lengths and cumulative half-work lengths, respectively. In \Cref{thm:r}, a local row endpoint is obtained from a cumulative work boundary and a row boundary $kh$, with $k\leq n$, or is $0$ or $h$. Translation by $a_\ell$ therefore gives a first-half endpoint bound $B_e'=S(3,\max\{B_t,B_\Sigma,B_h+b\})$. A reflected endpoint is $a_\ell+b_\ell-e$, so a bound for all endpoints is $B_e=S(3,\max\{B_t,B_e'\})$. There are at most $4N$ nonempty operations, and at most $8N+2$ global event intervals including idle pieces up to $H$. Every preemption occurs at an operation boundary. The construction, sorting and sweep use polynomially many exact operations and work only with occupied rows. A machine-operation record costs at most $2(2B_e+2)+2(b+1)$ bits before framing. Listing all active assignments multiplies the event count by at most $n$.
+
+An operation moment has bound $B_{\mathrm{mom}}=S(2,2B_e)+1$. The objective has bound $S(4N,B_{\mathrm{mom}}+2b)$ and the multiplier has length at most $T_*$. For verification, \eqref{eq:integral-piece} uses dot products with at most $n$ entries, interval lengths and endpoint squares. The polynomial bound on these operands, the at most $q_0$ terms, and the exact rational checks of nonoverlap, workloads, moments, and equality prove the certificate bound. The same operations are polynomial in the actual encoded length of a supplied certificate.
+
+Each bound is polynomial in $L$, including the dimension and time-event counts. The dependence on binary input length gives weakly polynomial bit complexity. The operation counts alone would not establish this result. Neither discretization in time nor the generation of all subsets, chambers or active sets is used.

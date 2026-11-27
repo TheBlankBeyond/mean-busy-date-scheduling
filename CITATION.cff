@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you cite this research manuscript, please use the preferred citation."
+title: "Exact Polynomial-Time Optimization of Weighted Mean Busy Dates on Identical Parallel Machines"
+type: software
+authors:
+  - name: "The Blank Beyond"
+version: "2026-11-27-r2"
+preferred-citation:
+  type: unpublished
+  title: "Exact Polynomial-Time Optimization of Weighted Mean Busy Dates on Identical Parallel Machines"
+  authors:
+    - name: "The Blank Beyond"
+  year: 2026
+  version: "2026-11-27-r2"
